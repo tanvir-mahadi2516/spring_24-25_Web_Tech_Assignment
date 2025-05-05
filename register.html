@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Registration</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <fieldset>
+    <legend>Employee Information</legend>
+    <h1>Employee Registration</h1>
+    <form id="employeeForm" novalidate>
+        <label for="empId">Employee ID:</label><br>
+    <input type="text" id="empId" name="empId" required><br>
+        <span id="empIdError" class="error"></span><br>
+        
+        <label for="fullName">Full Name:</label><br>
+        <input type="text" id="fullName" name="fullName" required><br>
+        <span id="fullNameError" class="error"></span><br>
+        
+        <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" required><br>
+        <span id="emailError" class="error"></span><br>
+        
+        <label for="department">Department:</label><br>
+        <select id="department" name="department" required>
+            <option value="">Select Department</option>
+            <option value="HR">HR</option>
+            <option value="Sales">Sales</option>
+            <option value="IT">IT</option>
+            <option value="Marketing">Marketing</option>
+        </select><br>
+        <span id="departmentError" class="error"></span><br>
+        
+        <label for="joiningDate">Joining Date:</label><br>
+        <input type="date" id="joiningDate" name="joiningDate" required><br>
+        <span id="joiningDateError" class="error"></span><br>
+        
+        <label>Gender:</label><br>
+        <input type="radio" id="male" name="gender" value="Male" required>
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="Female">
+        <label for="female">Female</label><br>
+        <span id="genderError" class="error"></span><br>
+        
+        <label>Employment Type:</label><br>
+        <input type="checkbox" id="fullTime" name="employmentType" value="Full-Time">
+        <label for="fullTime">Full-Time</label><br><br>
+        
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+    </form>
+    </fieldset>
+
+    <div id="employeeInfo"></div>
+
+    <script>
+        document.getElementById('employeeForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            document.getElementById('empIdError').textContent = '';
+            document.getElementById('fullNameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('departmentError').textContent = '';
+            document.getElementById('joiningDateError').textContent = '';
+            document.getElementById('genderError').textContent = '';
+
+            const empId = document.getElementById('empId').value;
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('email').value;
+            const department = document.getElementById('department').value;
+            const joiningDate = document.getElementById('joiningDate').value;
+            const gender = document.querySelector('input[name="gender"]:checked');
+            const fullTime = document.getElementById('fullTime').checked;
+
+            let isValid = true;
+
+            if (!/EMP\d{3}$/.test(empId)) {
+                document.getElementById('empIdError').textContent = "Employee ID must start with 'EMP' followed by 3 digits (e.g., EMP123).";
+                isValid = false;
+            }
+
+            if (!/^[a-zA-Z\s]+$/.test(fullName)) {
+                document.getElementById('fullNameError').textContent = "Name should contain only alphabets and spaces.";
+                isValid = false;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                document.getElementById('emailError').textContent = "Please enter a valid email address.";
+                isValid = false;
+            }
+                    if (department === "") {
+                document.getElementById('departmentError').textContent = "Please select a department.";
+                isValid = false;
+            }
+
+
+            if (!joiningDate) {
+                document.getElementById('joiningDateError').textContent = "Joining Date cannot be empty.";
+                isValid = false;
+            }
+
+
+            if (!gender) {
+                document.getElementById('genderError').textContent = "Please select a gender.";
+                isValid = false;
+            }
+
+            if (isValid) {
+     
+                const infoDiv = document.getElementById('employeeInfo');
+                infoDiv.innerHTML = `
+                    <h3>Registered Employee Details:</h3>
+                    <p><strong>Employee ID:</strong> ${empId}</p>
+                    <p><strong>Full Name:</strong> ${fullName}</p>
+                    <p><strong>Email:</strong> ${email}</p>
+                    <p><strong>Department:</strong> ${department}</p>
+                    <p><strong>Joining Date:</strong> ${joiningDate}</p>
+                    <p><strong>Gender:</strong> ${gender.value}</p>
+                    <p><strong>Employment Type:</strong> ${fullTime ? "Full-Time" : "Part-Time"}</p>
+                `;
+            }
+        });
+
+
+        document.getElementById('employeeForm').addEventListener('reset', function() {
+            document.getElementById('empIdError').textContent = '';
+            document.getElementById('fullNameError').textContent = '';
+            document.getElementById('emailError').textContent = '';
+            document.getElementById('departmentError').textContent = '';
+            document.getElementById('joiningDateError').textContent = '';
+            document.getElementById('genderError').textContent = '';
+            document.getElementById('employeeInfo').innerHTML = '';
+        });
+    </script>
+</body>
+</html>
